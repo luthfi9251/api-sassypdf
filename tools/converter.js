@@ -40,7 +40,7 @@ async function convertToPNG(inputLoc, filename, outputLoc){                 //In
     let input = path.resolve(inputLoc)
     let pathOutput = path.join(outputLoc, filename.split(".")[0])
 
-    console.log("Converting to PNG.......")                     // Console log Status
+    console.log("convert - Converting to PNG.......")                     // Console log Status
     let job = await cloudConvert.jobs.create({
         "tasks": {
             "import-1": {
@@ -81,6 +81,8 @@ async function convertToPNG(inputLoc, filename, outputLoc){                 //In
 
     fs.mkdirSync(pathOutput)                            //making directory for file
 
+    console.log("convert - Downloading all PNGs")
+
     for(let i=0; i<file.length; i++){                   //downloading file
         let writeStream = fs.createWriteStream(path.join(pathOutput, file[i].filename))
         https.get(file[i].url, function(response) {
@@ -91,9 +93,12 @@ async function convertToPNG(inputLoc, filename, outputLoc){                 //In
             writeStream.on('error', reject);
         });
     }
+
+    console.log("convert - All PNGs downloaded")
+
     fs.unlink(input,err=>{
         if (err) return err
-        console.log("File Input Deleted")
+        console.log("convert - File Input Deleted")
     })
 
     return {
@@ -102,4 +107,4 @@ async function convertToPNG(inputLoc, filename, outputLoc){                 //In
 
 }
 
-module.exports = convertSelfToPNG
+module.exports = convertToPNG

@@ -7,14 +7,14 @@ module.exports = async (inputPath)=>{
     const fileName = path.basename(inputPath)
     const pathToWatermark = "./watermark.png"
     
-    console.log("\nGiving Watermark.......")                  // Console Log Status
+    console.log("watermark - Giving Watermark.......")                  // Console Log Status
 
     let watermarking = new Promise((resolve, reject)=>{
         let dirList = fs.readdirSync(inputDir)
         let count = 0
     
         dirList.forEach(async (file,index) => {
-            console.log(`Processing ${file}`)
+            console.log(`watermark - watermarking ${file}`)
             let metadata = await sharp(path.join(inputDir,file)).metadata()
             await sharp(pathToWatermark)
                 .resize({ width: Math.round(metadata.width*0.9)})
@@ -30,7 +30,7 @@ module.exports = async (inputPath)=>{
                         .toFile(path.join(inputDir, `wm-${index}.png`), (err)=>{
                             fs.unlinkSync(path.join(inputDir,file))
                             count+=1;
-                            console.log(`Done processing ${count} files`)
+                            console.log(`watermark - Done watermarking ${count} files`)
                             if(dirList.length === count){
                                 resolve("AllDone")
                             }
@@ -40,6 +40,5 @@ module.exports = async (inputPath)=>{
         });
     })
     let data = await watermarking;
-    console.log(data)
     return inputDir
 } 

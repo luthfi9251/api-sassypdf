@@ -8,7 +8,7 @@ module.exports = (inputDir, name)=>{
     const outputPath = path.resolve('./result')
     const filePath = path.join(outputPath, `${name.split(".")[0]}.pdf`)
 
-    console.log("\nMaking to PDF again......")                    // Console log Status
+    console.log("ToPDF - Making to PDF again......")                    // Console log Status
 
     doc.pipe(fs.createWriteStream(filePath))
 
@@ -20,8 +20,8 @@ module.exports = (inputDir, name)=>{
     doc.end();
     fs.rm(dir, { recursive: true, force: true },err=>{
         if(err) console.log(err)
-        console.log("Directory deleted!")
+        console.log("ToPDF - Directory deleted!")
     })
-    console.log("Operation Success!")                       // Console log Status
+    console.log("ToPDF - Operation Success!")                       // Console log Status
     return filePath
 }

@@ -19,10 +19,8 @@ const app = express()
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json())
 app.use(cors())
+app.use(express.static(path.join(__dirname, 'build')));
 
-app.get('/', (req, res)=>{
-    res.send("Hello There!")
-})
 
 app.get('/info', async (req, res)=>{
     let credit = await creditCheck()
@@ -49,7 +47,7 @@ app.get('/download/:id/:name', (req, res)=>{
     let { id, name} = req.params
     let address = path.join(__dirname, 'result', `${id}.pdf`)
     res.download(address, decodeURI(name), (err)=>{
-        if(err) console.log(err)
+        if(err) return err
         fs.stat(address, function(err, stat) {
             if (err == null) {
                 fs.unlinkSync(address)
@@ -61,6 +59,10 @@ app.get('/download/:id/:name', (req, res)=>{
         
     })
 })
+
+app.get('/*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'build', 'index.html'));
+});
 
 app.listen(PORT, err=>{
     if (err){
