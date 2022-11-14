@@ -20,6 +20,10 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json())
 app.use(cors())
 
+app.get('/', (req, res)=>{
+    res.send("Hello There!")
+})
+
 app.get('/info', async (req, res)=>{
     let credit = await creditCheck()
     res.json({
